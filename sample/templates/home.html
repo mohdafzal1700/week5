@@ -1,0 +1,21 @@
+{% extends 'model.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container-fluid px-0">
+    <div class="row d-block">
+        <div class="col">
+            <nav class="navbar navbar-dark bg-dark" >
+                <div class="container">
+                    <a class="navbar-brand fs-1 fw-bold" href="#">Home</a>
+                        <button class="btn btn-outline-secondary" type="submit"><a href="{% url 'logout' %}" class="text-decoration-none text-white">Logout</a></button>
+                    </div>
+              </nav>
+        </div>
+    </div>
+    <div class="row">
+        <h2 class="m-3 fst-italic">Welcome {{user.username}}</h2>
+    </div>
+
+</div>
+    
+    {% endblock %}

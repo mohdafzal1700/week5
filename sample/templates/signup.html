@@ -1,0 +1,48 @@
+{% extends 'model.html' %}
+{% block title %}SignUp{% endblock %}
+{% block content %}
+{% for message in messages %}
+<div class="alert alert-warning" role="alert">
+  {{message}}
+</div>
+{% endfor %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="row border border-2 shadow p-5 mb-5 bg-body rounded fs-5">
+                    <h1 class="text-center mb-5 fw-bolder">Sign Up</h1>
+            <div class="col align-self-center text-center">
+                
+                <div class="mb-5 row">
+                    <label for="username" class="col-sm-3 col-form-label">Username</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                  </div>
+                  <div class="mb-5 row">
+                    <label for="email" class="col-sm-3 col-form-label">Email</label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" id="Email" name="email" required>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="password1" class="col-sm-3 col-form-label">Password</label>
+                    <div class="col-sm-9">
+                      <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="password2" class="col-sm-3 col-form-label">Re-enter</label>
+                    <div class="col-sm-9">
+                      <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                   
+                  </div>
+                        <button type="submit" class="btn btn-dark ">Sign Up</button>
+              </div>
+        </div>    
+    </div>
+</form>
+
+{% endblock %}

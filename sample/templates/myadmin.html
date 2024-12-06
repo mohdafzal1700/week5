@@ -1,0 +1,170 @@
+{% extends 'model.html' %}
+{% block title %}Admin {% endblock %}
+{% block content %}
+<!-- navigation bar -->
+<nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold fs-1" href="#">Admin</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        <a class="nav-link active " data-bs-toggle="modal" data-bs-target="#addModal" aria-current="page" href="#addModal">Add User</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">LOGOUT</a>
+        </li>
+      </ul>
+      <form  class="d-flex" method="POST" action="{% url 'searchuser' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show col-xl-5 col-lg-6 col-md-7 col-10 mx-auto" role="alert">
+  <strong>{{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+<!-- details table -->
+<table class="table table-success table-striped ">
+  <thead>
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Joined date</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  {% for user in users %}
+  <tbody>
+    <tr>
+      <td>{{user.username}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.date_joined|date:"Y-m-d"}}</td>
+      {% if not user.is_superuser %}
+      <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit">Edit</button>
+      <span p-2></span> 
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">Delete</button></td>
+      {% else %}
+      <td></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<!-- Edit user -->
+ {% for user in users %}
+<div class="modal fade" id="edit" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModal">Edit user details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'edituser' user.id %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="col align-self-center text-center">
+                    <div class="mb-5 row">
+                          <label for="username" class="col-sm-3 col-form-label">Username</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" id="username" name="username" required value="{{user.username}}">
+                          </div>
+                        </div>
+                        <div class="mb-5 row">
+                          <label for="email" class="col-sm-3 col-form-label">Email</label>
+                          <div class="col-sm-9">
+                              <input type="email" class="form-control" id="Email" name="email" required value="{{user.email}}">
+                          </div>
+                        </div>
+                    </div>
+        
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+  </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<!-- Delete user -->
+ {% for user in users %}
+<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModal">Delete user</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure want to delete user details?
+      </div>
+      <div class="modal-footer">
+        <form action="{% url 'deleteuser' user.id %}" method="POST">
+          {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<!-- Add user -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ">
+        <form action="{% url 'adduser' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+                      
+                      <div class="mb-5 row">
+                          <label for="username" class="col-sm-3 col-form-label">Username</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" id="username" name="username" required>
+                          </div>
+                        </div>
+                        <div class="mb-5 row">
+                          <label for="email" class="col-sm-3 col-form-label">Email</label>
+                          <div class="col-sm-9">
+                              <input type="email" class="form-control" id="Email" name="email" required>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <label for="password1" class="col-sm-3 col-form-label">Password</label>
+                          <div class="col-sm-9">
+                            <input type="password" class="form-control" id="password1" name="password1" required>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <label for="password2" class="col-sm-3 col-form-label">Re-enter</label>
+                          <div class="col-sm-9">
+                            <input type="password" class="form-control" id="password2" name="password2" required>
+                          </div>
+                         
+                        </div>   
+      
+      
+      
+      
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      
+    </form>
+  </div>
+    </div>
+  </div>
+</div>
+    {% endblock %}

@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 
 #Sign up page
 @never_cache
-def siignup(request):
+def signup(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.POST:
